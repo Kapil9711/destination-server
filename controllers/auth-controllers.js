@@ -19,9 +19,10 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const userExist = await UserModel.findOne({ email });
-    if (!userExist) return res.json({ mgs: "invalid details" });
+    if (!userExist) return res.status(400).json({ mgs: "invalid details" });
     const isPassCorrect = await userExist.checkPassword(password);
-    if (!isPassCorrect) return res.json({ msg: "incorrect email or password" });
+    if (!isPassCorrect)
+      return res.status(401).json({ msg: "incorrect email or password" });
 
     res.status(200).json({
       msg: "login success",
